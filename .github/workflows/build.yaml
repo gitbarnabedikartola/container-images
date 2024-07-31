@@ -22,12 +22,13 @@ jobs:
           # Set Releases
           releases=
           git fetch --depth=2
-          for relese in $(git diff --name-only HEAD HEAD~1 | cut -f 1 -d \/ | sed /.git/d);do
+          for release in $(git diff --name-only HEAD HEAD~1 | cut -f 1 -d \/ | sed /.git/d);do
             echo "R=$release"
-            releases+=$release
+            releases+="$release, "
           done
 
-          echo $release
+          # Remover a ultima virgula+espaço das releases
+          releases=${releases%, }
           echo $releases
 
           echo "releases=$releases" >> $GITHUB_ENV
