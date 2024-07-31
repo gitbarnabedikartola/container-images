@@ -12,11 +12,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Tmate ##
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      # # Tmate ##
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
 
       - id: relese
+        name: Set Releases
         shell: bash
         run: |
           # Set Releases
@@ -40,13 +41,18 @@ jobs:
   build-release:
     runs-on: ubuntu-22.04
     needs: [releases]
-    strategy:
-      matrix:
-        releases: ${{fromJSON(needs.releases.outputs.releaseName)}}
+    # strategy:
+    #   matrix:
+    #     releases: ${{fromJSON(needs.releases.outputs.releaseName)}}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Echo Releases
+        shell: bash
+        run: |
+          echo "${{ needs.releases.outputs.releaseName }}"
 
       - name: Build Releases
         uses: gitbarnabedikartola/container-images@main
