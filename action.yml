@@ -49,31 +49,13 @@ runs:
         username: ${{ inputs.registryUser }}
         password: ${{ inputs.registryPassword }}
 
-    - name: Echos
-      env:
-        releaseName: ${{ inputs.releaseName }}
-        releaseTag: ${{ inputs.releaseTag }}
-        archs: ${{ inputs.archs }}
-        registryProject: ${{ inputs.registryProject }}
-      shell: bash
-      run: |
-        echo "releaseName=$releaseName"
-        echo "releaseTag=$releaseTag"
-        echo "archs=$archs"
-        echo "registryProject=$registryProject"
-
     - name: Build Multi-Arch
       uses: docker/build-push-action@v5
-      env:
-        releaseName: ${{ inputs.releaseName }}
-        releaseTag: ${{ inputs.releaseTag }}
-        archs: ${{ inputs.archs }}
-        registryProject: ${{ inputs.registryProject }}
       with:
-        context: $releaseName
-        file: $releaseName/Dockerfile
-        platforms: $archs
+        context: ${{ inputs.releaseName }}
+        file: ${{ inputs.releaseName }}/Dockerfile
+        platforms: ${{ inputs.archs }}
         push: true
         tags: |
-          $registryProject/$releaseName:latest
-          $registryProject/$releaseName:$releaseTag
+          ${{ inputs.registryProject }}/${{ inputs.releaseName }}:latest
+          ${{ inputs.registryProject }}/${{ inputs.releaseName }}:${{ inputs.releaseTag }}
