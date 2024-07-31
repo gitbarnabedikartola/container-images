@@ -16,7 +16,7 @@ jobs:
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
 
-      - id: relese
+      - id: release
         name: Set Releases
         shell: bash
         run: |
@@ -35,24 +35,24 @@ jobs:
           echo "releases=$releases" >> $GITHUB_OUTPUT
           echo "releaseTag=$(date +%Y%m%d.%H%M)" >> $GITHUB_OUTPUT
     outputs:
-      releaseName: ${{ steps.relese.outputs.releases }}
-      releaseTag: ${{ steps.relese.outputs.releaseTag }}
+      releaseName: ${{ steps.release.outputs.releases }}
+      releaseTag: ${{ steps.release.outputs.releaseTag }}
 
   build-release:
     runs-on: ubuntu-22.04
     needs: [releases]
     strategy:
       matrix:
-        releases: [${{ needs.releases.outputs.releaseName }}]
+        releases: ${{fromJSON(needs.releases.outputs.releaseName)}}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # - name: Echo Releases
-      #   shell: bash
-      #   run: |
-      #     echo "${{ needs.releases.outputs.releaseName }}"
+      - name: Echo Releases
+        shell: bash
+        run: |
+          echo "${{ matrix.releases }}"
 
       - name: Build Releases
         uses: gitbarnabedikartola/container-images@main
