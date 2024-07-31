@@ -30,7 +30,7 @@ jobs:
 
           # Remover a ultima virgula+espaço das releases
           releases=${releases%, }
-          echo $releases
+          echo "releses2 = $releases"
 
           # Se não houver releases, definir como um valor padrão para evitar erro no fromJSON
           if [ -z "$releases" ]; then
@@ -38,6 +38,8 @@ jobs:
           else
             releases=$(echo $releases | jq -R -s -c 'split(", ")')
           fi
+
+          echo "releses2 = $releases"
 
           echo "releases=$releases" >> $GITHUB_OUTPUT
           echo "releaseTag=$(date +%Y%m%d.%H%M)" >> $GITHUB_OUTPUT
@@ -51,7 +53,7 @@ jobs:
     strategy:
       matrix:
         releases: ${{ fromJSON(needs.releases.outputs.releaseName) }}
-
+    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
