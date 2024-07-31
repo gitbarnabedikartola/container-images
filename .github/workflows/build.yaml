@@ -19,8 +19,11 @@ jobs:
       - id: relese
         shell: bash
         run: |
+          # Set Releases
           releases=
-          for relese in $(git diff --name-only HEAD HEAD~1 | cut -f 1 -d \/);do
+          git fetch --depth=2
+          for relese in $(git diff --name-only HEAD HEAD~1 | cut -f 1 -d \/ | sed /.git/d);do
+            echo "R=$release"
             releases+=$release
           done
 
