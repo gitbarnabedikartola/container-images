@@ -21,9 +21,9 @@ jobs:
         shell: bash
         run: |
           # Set Releases
-          releases=
+          releases=""
           git fetch --depth=2
-          for release in $(git diff --name-only HEAD HEAD~1 | cut -f 1 -d \/ | sed /.git/d);do
+          for release in $(git diff --name-only HEAD HEAD~1 | cut -f 1 -d \/ | sed /.git/d); do
             echo "R=$release"
             releases+="$release, "
           done
@@ -31,6 +31,13 @@ jobs:
           # Remover a ultima virgula+espaço das releases
           releases=${releases%, }
           echo $releases
+
+          # Se não houver releases, definir como um valor padrão para evitar erro no fromJSON
+          if [ -z "$releases" ]; then
+            releases="{}"
+          else
+            releases=$(echo $releases | jq -R -s -c 'split(", ")')
+          fi
 
           echo "releases=$releases" >> $GITHUB_OUTPUT
           echo "releaseTag=$(date +%Y%m%d.%H%M)" >> $GITHUB_OUTPUT
@@ -43,7 +50,7 @@ jobs:
     needs: [releases]
     strategy:
       matrix:
-        releases: ${{fromJSON(needs.releases.outputs.releaseName)}}
+        releases: ${{ fromJSON(needs.releases.outputs.releaseName) }}
 
     steps:
       - name: Checkout
@@ -53,6 +60,7 @@ jobs:
         shell: bash
         run: |
           echo "${{ matrix.releases }}"
+
 
       - name: Build Releases
         uses: gitbarnabedikartola/container-images@main
