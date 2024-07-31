@@ -20,6 +20,8 @@ jobs:
             releases+=$release
           done
 
+          echo $release
+
           echo "releases=$releases" >> $GITHUB_ENV
           echo "releaseTag=$(date +%Y%m%d.%H%M)" >> $GITHUB_ENV
     outputs:
