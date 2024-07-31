@@ -65,8 +65,8 @@ jobs:
           registry: docker.io
           registryUser: ${{ secrets.DOCKER_USERNAME }}
           registryPassword: ${{ secrets.DOCKER_PASSWORD }}
-          registryProject: barnabenimbus
-          archs: linux/amd64
+          registryProject: 'barnabenimbus'
+          archs: 'linux/amd64'
 
           
 #       - name: Hadolint

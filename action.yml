@@ -58,7 +58,7 @@ runs:
         registryProject: ${{ inputs.registryProject }}
       with:
         context: $releaseName
-        file: $$releaseName/Dockerfile
+        file: $releaseName/Dockerfile
         platforms: $archs
         push: true
         tags: |
