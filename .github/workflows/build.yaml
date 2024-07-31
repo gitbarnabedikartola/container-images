@@ -44,7 +44,7 @@ jobs:
     strategy:
       matrix:
         # releases: ${{fromJSON(needs.releases.outputs.releaseName)}}
-        releases: ${{ needs.releases.outputs.releaseName }}
+        releases: [${{ needs.releases.outputs.releaseName }}]
 
     steps:
       - name: Checkout
