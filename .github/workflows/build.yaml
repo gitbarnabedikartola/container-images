@@ -23,7 +23,7 @@ jobs:
           # Set Releases
           releases=""
           git fetch --depth=2
-          for release in $(git diff --name-only HEAD HEAD~1 | cut -f 1 -d \/ | sed /.git/d); do
+          for release in $(git diff --name-only HEAD HEAD~1 | cut -f 1 -d \/ | sed '/.git/d;/action/d'); do
             echo "R=$release"
             releases+="$release,"
           done
