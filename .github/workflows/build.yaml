@@ -43,16 +43,17 @@ jobs:
     needs: [releases]
     strategy:
       matrix:
-        releases: ${{fromJSON(needs.releases.outputs.releaseName)}}
+        # releases: ${{fromJSON(needs.releases.outputs.releaseName)}}
+        releases: ${{ needs.releases.outputs.releaseName }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Echo Releases
-        shell: bash
-        run: |
-          echo "${{ needs.releases.outputs.releaseName }}"
+      # - name: Echo Releases
+      #   shell: bash
+      #   run: |
+      #     echo "${{ needs.releases.outputs.releaseName }}"
 
       - name: Build Releases
         uses: gitbarnabedikartola/container-images@main
