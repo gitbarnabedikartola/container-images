@@ -25,21 +25,14 @@ jobs:
           git fetch --depth=2
           for release in $(git diff --name-only HEAD HEAD~1 | cut -f 1 -d \/ | sed /.git/d); do
             echo "R=$release"
-            releases+="$release, "
+            releases+="$release,"
           done
 
           # Remover a ultima virgula+espaço das releases
-          releases=${releases%, }
-          echo "releses2 = $releases"
+          releases=${releases%,}
+          releases=$(tr -d '\n' <<< $releases | jq -R -s -c 'split(",")')
 
-          # Se não houver releases, definir como um valor padrão para evitar erro no fromJSON
-          if [ -z "$releases" ]; then
-            releases="{}"
-          else
-            releases=$(echo $releases | jq -R -s -c 'split(", ")')
-          fi
-
-          echo "releses2 = $releases"
+          echo "relesesJson = $releases"
 
           echo "releases=$releases" >> $GITHUB_OUTPUT
           echo "releaseTag=$(date +%Y%m%d.%H%M)" >> $GITHUB_OUTPUT
